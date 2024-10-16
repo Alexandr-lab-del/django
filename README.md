@@ -17,7 +17,23 @@ Skystore — это интернет-магазин, предназначенн�
 - python -m venv venv
 - venv\Scripts\activate
 - pip install django 
+- pip install django psycopg2-binary
+- python manage.py runserver
+- python manage.py migrate
+- python manage.py createsuperuser
 - python manage.py runserver
 
 2. Откройте в браузере
 - Перейдите на http://127.0.0.1:8000 для просмотра проекта.
+3. Настройте базу данных PostgreSQL
+4. Настройте базу данных PostgreSQL:
+     DATABASES = {
+         'default': {
+             'ENGINE': 'django.db.backends.postgresql_psycopg2',
+             'NAME': 'yourdatabase',
+             'USER': 'yourusername',
+             'PASSWORD': 'yourpassword',
+             'HOST': 'localhost',
+             'PORT': '5432',
+         }
+     }
