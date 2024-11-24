@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ object.title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        article {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        a {
+            color: #35424a;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <article>
+        <h1> Название: {{ object.title }}</h1>
+        {% if object.preview_image %}
+            <img src="{{ object.preview_image.url }}" alt="{{ object.title }}" width="300" height="300">
+        {% endif %}
+        <p>Описание: {{ object.content }}</p>
+        <p>Создано: {{ object.created_at |date:"H.i"}}</p>
+        <p>Количество просмотров: {{ object.views_count }}</p>
+        <a href="{% url 'blog:post_edit' object.id %}">Редактировать</a>
+        <a href="{% url 'blog:post_delete' object.id %}">Удалить</a>
+        <br>
+        <a href="{% url 'blog:post_list' %}">Назад к списку</a>
+    </article>
+</body>
+</html>
