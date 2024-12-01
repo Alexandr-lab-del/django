@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список постов блога</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header, footer {
+            background: #35424a;
+            color: #ffffff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #ffffff;
+        }
+        a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #fff;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .blue-text {
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Список постов блога</h1>
+        <a href="{% url 'blog:post_create' %}">Создать новый пост |</a>
+        <a href="{% url 'catalog:product_list' %}">Вернуться на главную</a>
+    </header>
+    <main>
+        <ul>
+            {% for post in object_list %}
+                <li>
+                    <a href="{% url 'blog:post_detail' post.id %}" class="blue-text">{{ post.title }}</a>
+                    <p>Создан: {{ post.created_at |date:"H.i"}}</p>
+                    <p>Описание: {{ post.content | truncatechars:100 }}</p>
+                    <p>Количество просмотров: {{ post.views_count }}</p>
+                    <p>{% if post.is_published %}Опубликован{% else %}Неопубликован{% endif %}</p>
+                    <a href="{% url 'blog:post_edit' post.id %}" class="blue-text">Редактировать</a>
+                    <a href="{% url 'blog:post_delete' post.id %}" class="blue-text">Удалить</a>
+                </li>
+            {% empty %}
+                <li>Нет доступных постов.</li>
+            {% endfor %}
+        </ul>
+    </main>
+    <footer>
+        <p>© 2024 Блог</p>
+    </footer>
+</body>
+</html>

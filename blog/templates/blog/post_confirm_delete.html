@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подтверждение удаления</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .confirmation {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation">
+        <h1>Подтвердите удаление поста</h1>
+        <p>Вы уверены, что хотите удалить "{{ object.title }}"?</p>
+        <form method="post">
+            {% csrf_token %}
+            <input type="submit" value="Удалить">
+        </form>
+        <br>
+        <a href="{% url 'blog:post_list' %}">Отмена</a>
+    </div>
+</body>
+</html>
