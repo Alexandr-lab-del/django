@@ -4,8 +4,10 @@ from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 from django.shortcuts import get_object_or_404, redirect
-from catalog.models import Product
+from catalog.models import Product, Category
 from catalog.forms import ProductForm
+from django.shortcuts import render
+from .services import get_products_by_category, get_products_from_cache
 
 
 class ProductListView(ListView):
@@ -13,6 +15,14 @@ class ProductListView(ListView):
     model = Product
     template_name = 'products/product_list.html'
     context_object_name = 'products'
+
+    def get_queryset(self):
+        return get_products_from_cache()
+
+    def product_list(request):
+        categories = Category.objects.all()
+        products = Product.objects.all()
+        return render(request, 'catalog/product_list.html', {'categories': categories, 'object_list': products})
 
 
 class HomeView(TemplateView):
@@ -26,7 +36,6 @@ class ContactsView(TemplateView):
 
 
 class ProductDetailView(DetailView):
-
     model = Product
     template_name = 'products/product_detail.html'
     context_object_name = 'product'
@@ -88,3 +97,9 @@ def delete_product(request, product_id):
         return redirect('catalog:product_list')
     else:
         raise PermissionDenied
+
+
+def products_by_category_view(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    products = get_products_by_category(category_id)
+    return render(request, 'products_by_category.html', {'products': products, 'category': category})
