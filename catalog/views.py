@@ -6,7 +6,6 @@ from django.views.generic import ListView, DetailView, TemplateView, CreateView,
 from django.shortcuts import get_object_or_404, redirect
 from catalog.models import Product, Category
 from catalog.forms import ProductForm
-from django.shortcuts import render
 from .services import get_products_by_category, get_products_from_cache
 
 
@@ -18,11 +17,6 @@ class ProductListView(ListView):
 
     def get_queryset(self):
         return get_products_from_cache()
-
-    def product_list(request):
-        categories = Category.objects.all()
-        products = Product.objects.all()
-        return render(request, 'catalog/product_list.html', {'categories': categories, 'object_list': products})
 
 
 class HomeView(TemplateView):
@@ -99,7 +93,9 @@ def delete_product(request, product_id):
         raise PermissionDenied
 
 
-def products_by_category_view(request, category_id):
-    category = get_object_or_404(Category, id=category_id)
-    products = get_products_by_category(category_id)
-    return render(request, 'products_by_category.html', {'products': products, 'category': category})
+class ProductsByCategoryView(ListView):
+    model = Category
+
+    def get_queryset(self):
+        category_id = self.kwargs.get('pk')
+        return get_products_by_category(category_id=category_id)
